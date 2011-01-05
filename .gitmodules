@@ -1,0 +1,3 @@
+[submodule "lib/sc2ranks"]
+	path = lib/sc2ranks
+	url = git@github.com:phleet/sc2ranks.git
