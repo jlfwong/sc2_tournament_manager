@@ -35,6 +35,6 @@ class PlayerAdminForm(forms.ModelForm):
 
 class PlayerAdmin(admin.ModelAdmin):
     form = PlayerAdminForm
-    list_display = ('name','charcode','league')
+    list_display = ('name','charcode','league','race')
 
 admin.site.register(Player,PlayerAdmin)

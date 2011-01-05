@@ -92,4 +92,5 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'ladder_viewer.players',
+    'ladder_viewer.tournament'
 )
