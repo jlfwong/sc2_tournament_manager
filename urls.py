@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.views.static import *
 from django.conf import settings
+from ladder_viewer.players.views import sc2ranks
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -11,6 +12,7 @@ urlpatterns = patterns('',
     # (r'^ladder_viewer/', include('ladder_viewer.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
+    (r'^admin/players/player/sc2ranks', sc2ranks),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
