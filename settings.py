@@ -69,7 +69,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
+}
+
+INTERNAL_IPS=('127.0.0.1')
 
 ROOT_URLCONF = 'ladder_viewer.urls'
 
@@ -92,5 +99,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'ladder_viewer.players',
-    'ladder_viewer.tournament'
+    'ladder_viewer.tournament',
+    'debug_toolbar'
 )
