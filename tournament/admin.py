@@ -1,36 +1,60 @@
 from django.contrib import admin
-from ladder_viewer.tournament.models import Slot, Matchup
+from ladder_viewer.tournament.models import Matchup
 from ladder_viewer.players.models import Player
 from django import forms
 from django.db.models import Q
 
-class SlotInline(admin.StackedInline):
-    model = Slot
-    max_num = 2
-    can_delete = False
-
 class MatchupAdminForm(forms.ModelForm):
-
     def __init__(self,*args,**kwargs):
         """ Limit the choices of winner to the players in the match """
         super(MatchupAdminForm,self).__init__(*args,**kwargs)
-        q = Q()
-        for slot in self.instance.slot_set.all():
-            q = q | Q(slot=slot)
 
-        self.fields['winner'].queryset=Player.objects.filter(q)
+        if self.fields.has_key('winner'):
+            matchup = self.instance
+            q = Q(id=-1)
+            if matchup.player_1_id:
+                q = q | Q(id=matchup.player_1.id)
+            if matchup.player_2_id:
+                q = q | Q(id=matchup.player_2.id)
+
+            self.fields['winner'].queryset=Player.objects.filter(q)
+
+    class Meta: pass
 
 class MatchupAdmin(admin.ModelAdmin):
     model = Matchup
-    inlines = [SlotInline]
     form = MatchupAdminForm
 
-    def save_formset(self, request, form, formset, change):
-        for slot_form in formset.forms:
-            if slot_form.instance.pk: continue
-            slot_form.instance.matchup = form.instance
-            slot_form.save()
 
-        return super(MatchupAdmin,self).save_formset(request,form,formset,change)
+    def change_view(self, *args, **kwargs): 
+        self.fieldsets = (
+            (None, {
+                'fields': ('name',)
+            }),
+            ('Results', {
+                'fields': ('winner',)
+            }),
+            ('Players', {
+                'fields': ('player_1', 'player_2',)
+            }),
+            ('Aftermath', {
+                'fields': ('winner_matchup','loser_matchup',)
+            }),
+        )
+        return super(MatchupAdmin, self).change_view(*args,**kwargs)
+
+    def add_view(self, *args, **kwargs):
+        self.fieldsets = (
+            (None, {
+                'fields': ('name',)
+            }),
+            ('Players', {
+                'fields': ('player_1', 'player_2',)
+            }),
+            ('Aftermath', {
+                'fields': ('winner_matchup','loser_matchup',),
+            }),
+        )
+        return super(MatchupAdmin, self).add_view(*args,**kwargs)
 
 admin.site.register(Matchup,MatchupAdmin)
