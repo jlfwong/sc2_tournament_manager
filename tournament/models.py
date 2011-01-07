@@ -1,15 +1,10 @@
 from django.db import models
 
-def has_changed(instance, field):
-    if not instance.pk:
-        return False
-    old_value = instance.__class__._default_manager.\
-             filter(pk=instance.pk).values(field).get()[field]
-    return not getattr(instance, field) == old_value
-
 class Matchup(models.Model):
     name        = models.CharField(max_length=30)
-    winner      = models.ForeignKey('players.player',blank=True,null=True)
+    winner      = models.ForeignKey('players.player',   blank=True,
+                                                        null=True,
+                                                        related_name='won')
 
     winner_matchup  = models.ForeignKey('self',     related_name='win_source', 
                                                     blank=True,
@@ -23,8 +18,6 @@ class Matchup(models.Model):
                                                     verbose_name='Loser goes to',
                                                     help_text='Leave blank if loser is eliminated')
 
-
-    # FIXME: Matchup with this Player 1 already exists.
     player_1 = models.ForeignKey('players.Player',      blank=True,
                                                         null=True,
                                                         related_name='player_1',
@@ -53,35 +46,25 @@ class Matchup(models.Model):
             ret += [self.player_2_id]
         return ret
 
-    def __getattr__(self,name):
-        if name == 'loser':
-            if self.winner_id:
-                if self.winner == self.player_1:
-                    return self.player_2
-                else:
-                    return self.player_1
+    @property
+    def loser(self):
+        if self.winner_id:
+            if self.winner == self.player_1:
+                return self.player_2
             else:
-                return None
-        elif name == 'loser_id':
-            if self.loser == None:
-                return self.loser.id
-            else:
-                return None
+                return self.player_1
         else:
-            super(Matchup,self).__getattr(name)
+            return None
+
+    @property
+    def loser_id(self):
+        if self.loser == None:
+            return None
+        else:
+            return self.loser.id
 
     def __str__(self):
-        if self.player_1_id:
-            player_1_name = self.player_1.name
-        else:
-            player_1_name = '???'
-
-        if self.player_2_id:
-            player_2_name = self.player_2.name
-        else:
-            player_2_name = '???'
-
-        return "%s: %s vs. %s" % (self.name,player_1_name,player_2_name)
+        return self.name
 
     def save(self):
         super(Matchup,self).save()
@@ -97,9 +80,9 @@ class Matchup(models.Model):
                     return
 
                 # Winner changed, remove the loser from the slots
-                if winner_matchup.player_1_id == self.loser.id:
+                if winner_matchup.player_1_id == self.loser_id:
                     winner_matchup.player_1 = None
-                elif winner_matchup.player_2_id == self.loser.id:
+                elif winner_matchup.player_2_id == self.loser_id:
                     winner_matchup.player_2 = None
 
                 # Propogate the winner
@@ -112,20 +95,20 @@ class Matchup(models.Model):
 
                 winner_matchup.save()
 
-            # Loser already propogated
+        if self.loser_id:
             if self.loser_matchup_id:
                 loser_matchup = self.loser_matchup
     
                 # Loser already propogated
-                if loser_matchup.player_1_id == self.loser.id:
+                if loser_matchup.player_1_id == self.loser_id:
                     return
-                if loser_matchup.player_2_id == self.loser.id:
+                if loser_matchup.player_2_id == self.loser_id:
                     return
 
                 # Loser changed, remove the winner from the slots
-                if loser_matchup.player_1_id == self.winner.id:
+                if loser_matchup.player_1_id == self.winner_id:
                     loser_matchup.player_1 = None
-                if loser_matchup.player_2_id == self.winner.id:
+                if loser_matchup.player_2_id == self.winner_id:
                     loser_matchup.player_2 = None
 
                 # Propogate the loser

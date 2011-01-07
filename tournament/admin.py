@@ -23,9 +23,10 @@ class MatchupAdminForm(forms.ModelForm):
     class Meta: pass
 
 class MatchupAdmin(admin.ModelAdmin):
-
     model = Matchup
     form = MatchupAdminForm
+    select_related = True
+
     list_display = (
         'name',
         'winner_matchup',
