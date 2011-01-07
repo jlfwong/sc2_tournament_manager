@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-from ladder_viewer.lib.sc2ranks.sc2ranks import Sc2Ranks
+from lib.sc2ranks.sc2ranks import Sc2Ranks
 
 def sc2ranks(request):
     client = Sc2Ranks('GSAR tournament')

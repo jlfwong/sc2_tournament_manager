@@ -1,8 +1,6 @@
 import os.path
 import sys
 
-# Django settings for ladder_viewer project.
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -18,6 +16,8 @@ DATABASE_USER      = 'sc2'                          # Not used with sqlite3.
 DATABASE_PASSWORD  = 'sc2'                      # Not used with sqlite3.
 DATABASE_HOST      = ''                             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT      = ''                             # Set to empty string for default. Not used with sqlite3.
+
+LOGIN_URL = '/login'
 
 if 'test' in sys.argv:
     DATABASE_ENGINE = 'sqlite3'
@@ -82,7 +82,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS=('127.0.0.1')
 
-ROOT_URLCONF = 'ladder_viewer.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -102,7 +102,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
 
-    'ladder_viewer.players',
-    'ladder_viewer.tournament',
+    'players',
+    'tournament',
     'debug_toolbar'
 )

@@ -4,17 +4,48 @@ from players.models import Player
 from django.test.client import Client
 from django.contrib.auth.models import User
 
-class MatchupAdminTest(TestCase):
+class FrontendTest(TestCase):
     def setUp(self): 
         """ Create a superuser and log in """
         user = User.objects.create_user('test_user','test@test.com','password')
+        user.save()
+
+        self.client = Client()
+        self.assertTrue(self.client.login(
+            username='test_user',
+            password='password',
+        ))
+
+    def test_get_home(self):
+        resp = self.client.get('/')
+        self.assertEqual(resp.status_code,200)
+
+        self.client.logout()
+
+        resp = self.client.get('/')
+        self.assertRedirects(resp,'/login?next=/')
+
+    def test_get_players(self):
+        resp = self.client.get('/players')
+        self.assertEqual(resp.status_code,200)
+
+        self.client.logout()
+
+        resp = self.client.get('/players')
+        self.assertRedirects(resp,'/login?next=/players')
+        
+
+class MatchupAdminTest(TestCase):
+    def setUp(self): 
+        """ Create a superuser and log in """
+        user = User.objects.create_user('test_admin','test@test.com','password')
         user.is_superuser = True
         user.is_staff = True
         user.save()
 
         self.client = Client()
         self.assertTrue(self.client.login(
-            username='test_user',
+            username='test_admin',
             password='password',
         ))
 

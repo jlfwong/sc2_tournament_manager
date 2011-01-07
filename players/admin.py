@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ladder_viewer.players.models import Player
+from players.models import Player
 from django import forms
 from django.template import Template, Context
 from django.utils.safestring import mark_safe

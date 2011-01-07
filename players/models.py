@@ -25,6 +25,11 @@ class Player(models.Model):
     portrait_row    = models.IntegerField()
     portrait_col    = models.IntegerField()
 
+    def sc2ranks_profile_url(self):
+        return "http://sc2ranks.com/char/us/%s/%s" % (
+            self.bnet_id, self.name
+        )
+
     def __str__(self):
         return self.name
 

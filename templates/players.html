@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block headtitle %}Player View{% endblock %} 
+{% block content %}  
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Friend Code</th>
+            <th>League</th>
+            <th>Race</th>
+            <th>Profile</th>
+    {% for player in player_list %}
+        <tr>
+            <td>{{player.name}}</td>
+            <td>{{player.charcode}}</td>
+            <td>{{player.get_league_display}}</td>
+            <td>{{player.get_race_display}}</td>
+            <td>
+                <a href="{{player.sc2ranks_profile_url}}">
+                    {{player.sc2ranks_profile_url}}
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
