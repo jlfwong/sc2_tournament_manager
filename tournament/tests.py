@@ -54,23 +54,30 @@ class MatchupTest(TestCase):
         self.assertEqual(matchup.loser,bob)
         
 
-    def test_winner_propogation(self):
+    def test_result_propogation(self):
+        """
+        Make sure that everyone goes where they're supposed to after a game
+        """
+
         alice   = Player.objects.get(name='alice')
         bob     = Player.objects.get(name='bob')
         candice = Player.objects.get(name='candice')
         david   = Player.objects.get(name='david')
 
         Matchup(name='Finals').save()
+        Matchup(name='Consolation').save()
 
         Matchup(name='Semi East',
                 player_1=alice,
                 player_2=bob,
-                winner_matchup=Matchup.objects.get(name='Finals')).save()
+                winner_matchup=Matchup.objects.get(name='Finals'),
+                loser_matchup=Matchup.objects.get(name='Consolation')).save()
 
         Matchup(name='Semi West',
                 player_1=candice,
                 player_2=david,
-                winner_matchup=Matchup.objects.get(name='Finals')).save()
+                winner_matchup=Matchup.objects.get(name='Finals'),
+                loser_matchup=Matchup.objects.get(name='Consolation')).save()
         
         # Bob wins Semi East
         semi_east = Matchup.objects.get(name='Semi East')
@@ -86,6 +93,10 @@ class MatchupTest(TestCase):
         self.assertTrue(bob in finals.participants())
         self.assertTrue(candice in finals.participants())
 
+        consolation = Matchup.objects.get(name='Consolation')
+        self.assertTrue(alice in consolation.participants())
+        self.assertTrue(david in consolation.participants())
+
         # Correction: Alice wins Semi East
         semi_east = Matchup.objects.get(name='Semi East')
         semi_east.winner = alice
@@ -96,6 +107,11 @@ class MatchupTest(TestCase):
         self.assertTrue(bob not in finals.participants())
         self.assertTrue(candice in finals.participants())
 
+        consolation = Matchup.objects.get(name='Consolation')
+        self.assertTrue(bob in consolation.participants())
+        self.assertTrue(alice not in consolation.participants())
+        self.assertTrue(david in consolation.participants())
+
         # Correction: David wins Semi West
         semi_west = Matchup.objects.get(name='Semi West')
         semi_west.winner = david
@@ -105,3 +121,8 @@ class MatchupTest(TestCase):
         self.assertTrue(david in finals.participants())
         self.assertTrue(candice not in finals.participants())
         self.assertTrue(alice in finals.participants())
+
+        consolation = Matchup.objects.get(name='Consolation')
+        self.assertTrue(bob in consolation.participants())
+        self.assertTrue(david not in consolation.participants())
+        self.assertTrue(candice in consolation.participants())
