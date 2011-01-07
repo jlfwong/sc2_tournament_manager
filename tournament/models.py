@@ -86,30 +86,59 @@ class Matchup(models.Model):
     def save(self):
         super(Matchup,self).save()
 
-        if self.winner_id and self.winner_matchup_id:
-            winner_matchup = self.winner_matchup
+        if self.winner_id:
+            if self.winner_matchup_id:
+                winner_matchup = self.winner_matchup
 
-            # Winner already propogated
-            if winner_matchup.player_1_id == self.winner.id:
-                return
-            if winner_matchup.player_2_id == self.winner.id:
-                return
+                # Winner already propogated
+                if winner_matchup.player_1_id == self.winner.id:
+                    return
+                if winner_matchup.player_2_id == self.winner.id:
+                    return
 
-            # Winner changed, remove the loser from the slots
-            if winner_matchup.player_1_id == self.loser.id:
-                winner_matchup.player_1 = None
-            elif winner_matchup.player_2_id == self.loser.id:
-                winner_matchup.player_2 = None
+                # Winner changed, remove the loser from the slots
+                if winner_matchup.player_1_id == self.loser.id:
+                    winner_matchup.player_1 = None
+                elif winner_matchup.player_2_id == self.loser.id:
+                    winner_matchup.player_2 = None
 
-            # Propogate the winner
-            if winner_matchup.player_1_id == None:
-                winner_matchup.player_1 = self.winner
-            elif winner_matchup.player_2_id == None:
-                winner_matchup.player_2 = self.winner
-            else:
-                raise Exception('Cannot propogate winner')
+                # Propogate the winner
+                if winner_matchup.player_1_id == None:
+                    winner_matchup.player_1 = self.winner
+                elif winner_matchup.player_2_id == None:
+                    winner_matchup.player_2 = self.winner
+                else:
+                    raise Exception('Cannot propogate winner')
 
-            winner_matchup.save()
+                winner_matchup.save()
+
+            # Loser already propogated
+            if self.loser_matchup_id:
+                loser_matchup = self.loser_matchup
+    
+                # Loser already propogated
+                if loser_matchup.player_1_id == self.loser.id:
+                    return
+                if loser_matchup.player_2_id == self.loser.id:
+                    return
+
+                # Loser changed, remove the winner from the slots
+                if loser_matchup.player_1_id == self.winner.id:
+                    loser_matchup.player_1 = None
+                if loser_matchup.player_2_id == self.winner.id:
+                    loser_matchup.player_2 = None
+
+                # Propogate the loser
+                if loser_matchup.player_1_id == None:
+                    loser_matchup.player_1 = self.loser
+                elif loser_matchup.player_2_id == None:
+                    loser_matchup.player_2 = self.loser
+                else:
+                    raise Exception('Cannot propogate loser')
+
+                loser_matchup.save()
+                    
+
 
     class Meta:
         ordering = ['name']

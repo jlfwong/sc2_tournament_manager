@@ -1,0 +1,58 @@
+[
+    {
+        "pk": 1, 
+        "model": "players.player", 
+        "fields": {
+            "name": "alice", 
+            "league": "g", 
+            "bnet_id": 2209392, 
+            "portrait_id": 2, 
+            "portrait_col": 3, 
+            "race": "t", 
+            "charcode": 462, 
+            "portrait_row": 5
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "players.player", 
+        "fields": {
+            "name": "bob", 
+            "league": "d", 
+            "bnet_id": 653555, 
+            "portrait_id": 0, 
+            "portrait_col": 3, 
+            "race": "p", 
+            "charcode": 721, 
+            "portrait_row": 1
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "players.player", 
+        "fields": {
+            "name": "candice", 
+            "league": "g", 
+            "bnet_id": 777978, 
+            "portrait_id": 0, 
+            "portrait_col": 0, 
+            "race": "p", 
+            "charcode": 818, 
+            "portrait_row": 4
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "players.player", 
+        "fields": {
+            "name": "david", 
+            "league": "d", 
+            "bnet_id": 1218680, 
+            "portrait_id": 0, 
+            "portrait_col": 2, 
+            "race": "r", 
+            "charcode": 122, 
+            "portrait_row": 2
+        }
+    }
+]
