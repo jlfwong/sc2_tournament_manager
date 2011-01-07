@@ -3,6 +3,7 @@ from ladder_viewer.tournament.models import Matchup
 from ladder_viewer.players.models import Player
 from django import forms
 from django.db.models import Q
+from django.utils.functional import curry
 
 class MatchupAdminForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
@@ -22,9 +23,27 @@ class MatchupAdminForm(forms.ModelForm):
     class Meta: pass
 
 class MatchupAdmin(admin.ModelAdmin):
+
     model = Matchup
     form = MatchupAdminForm
+    list_display = (
+        'name',
+        'winner_matchup',
+        'loser_matchup',
+        'player_1',
+        'player_2',
+        'winner',
+    )
 
+    list_editable = (
+        'winner_matchup',
+        'loser_matchup',
+        'player_1',
+        'player_2',
+        'winner',
+    )
+
+    radio_fields = {'winner':admin.HORIZONTAL}
 
     def change_view(self, *args, **kwargs): 
         self.fieldsets = (
@@ -34,11 +53,11 @@ class MatchupAdmin(admin.ModelAdmin):
             ('Results', {
                 'fields': ('winner',)
             }),
-            ('Players', {
-                'fields': ('player_1', 'player_2',)
-            }),
             ('Aftermath', {
                 'fields': ('winner_matchup','loser_matchup',)
+            }),
+            ('Players', {
+                'fields': ('player_1', 'player_2',)
             }),
         )
         return super(MatchupAdmin, self).change_view(*args,**kwargs)
@@ -48,13 +67,16 @@ class MatchupAdmin(admin.ModelAdmin):
             (None, {
                 'fields': ('name',)
             }),
-            ('Players', {
-                'fields': ('player_1', 'player_2',)
-            }),
             ('Aftermath', {
                 'fields': ('winner_matchup','loser_matchup',),
             }),
+            ('Players', {
+                'fields': ('player_1', 'player_2',)
+            }),
         )
         return super(MatchupAdmin, self).add_view(*args,**kwargs)
+        
+    # Use MatchupAdminForm for changelist as well
+    get_changelist_form = curry(admin.ModelAdmin.get_changelist_form,form=MatchupAdminForm)
 
 admin.site.register(Matchup,MatchupAdmin)

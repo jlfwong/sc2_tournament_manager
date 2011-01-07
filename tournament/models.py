@@ -4,29 +4,27 @@ class Matchup(models.Model):
     name        = models.CharField(max_length=30)
     winner      = models.ForeignKey('players.player',blank=True,null=True)
 
-    winner_matchup  = models.OneToOneField('self',  related_name='win_source', 
+    winner_matchup  = models.ForeignKey('self',     related_name='win_source', 
                                                     blank=True,
-                                                    unique=True,
                                                     null=True,
                                                     verbose_name='Winner goes to',
                                                     help_text='Leave blank for Finals')
 
-    loser_matchup   = models.OneToOneField('self',  related_name='lose_source',
+    loser_matchup   = models.ForeignKey('self',     related_name='lose_source',
                                                     blank=True,
-                                                    unique=True,
                                                     null=True,
                                                     verbose_name='Loser goes to',
                                                     help_text='Leave blank if loser is eliminated')
 
 
     # FIXME: Matchup with this Player 1 already exists.
-    player_1 = models.OneToOneField('players.Player',   blank=True,
+    player_1 = models.ForeignKey('players.Player',      blank=True,
                                                         null=True,
                                                         related_name='player_1',
                                                         verbose_name='Player 1',
                                                         help_text='Only set for first round matches')
 
-    player_2 = models.OneToOneField('players.Player',   blank=True,
+    player_2 = models.ForeignKey('players.Player',      blank=True,
                                                         null=True,
                                                         related_name='player_2',
                                                         verbose_name='Player 2',
@@ -44,3 +42,6 @@ class Matchup(models.Model):
             player_2_name = '???'
 
         return "%s: %s vs. %s" % (self.name,player_1_name,player_2_name)
+
+    class Meta:
+        ordering = ['name']
