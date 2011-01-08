@@ -48,11 +48,15 @@ body {
 .player_box .name {
     font-family: Tahoma;
     font-size: 10px;
-    color: #fff;
     width: 64px;
     height: 10px;
     text-align: center;
     float: left;
+}
+
+.player_box .name a {
+    color: #fff;
+    text-decoration: none;
 }
 
 .race_icon {
