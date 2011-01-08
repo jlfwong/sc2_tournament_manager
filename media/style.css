@@ -52,6 +52,7 @@ body {
     height: 10px;
     text-align: center;
     float: left;
+    margin-top: -1px;
 }
 
 .player_box .name a {
