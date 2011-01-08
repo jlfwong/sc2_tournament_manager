@@ -73,12 +73,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
-
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False
-}
 
 INTERNAL_IPS=('127.0.0.1')
 
@@ -104,5 +99,4 @@ INSTALLED_APPS = (
 
     'players',
     'tournament',
-    'debug_toolbar'
 )

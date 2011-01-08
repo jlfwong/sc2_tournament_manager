@@ -1,0 +1,79 @@
+body {
+    background: black;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+#ladder {
+    margin: auto;
+    width: 900px;
+    height: 525px;
+}
+
+#ladder_container {
+    position: relative;
+}
+
+.player_box {
+    position: absolute;
+}
+
+.league_icon {
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-image:url('/site_media/img/ranks.png');
+}
+
+.league_icon.Diamond {
+    background-position:0px 0px;
+}
+
+.league_icon.Platinum {
+    background-position:-10px 0px;
+}
+.league_icon.Gold {
+    background-position:-20px 0px;
+}
+
+.league_icon.Silver {
+    background-position:-30px 0px;
+}
+
+.league_icon.Bronze {
+    background-position:-40px 0px;
+}
+
+.player_box .name {
+    font-family: Tahoma;
+    font-size: 10px;
+    color: #fff;
+    width: 64px;
+    height: 10px;
+    text-align: center;
+    float: left;
+}
+
+.race_icon {
+    width: 10px;
+    height: 10px;
+    float: left;
+    background-image:url('/site_media/img/races.png');
+}
+
+.race_icon.Terran {
+    background-position: 0px 0px;
+}
+
+.race_icon.Protoss {
+    background-position: -10px 0px;
+}
+
+.race_icon.Zerg {
+    background-position: -20px 0px;
+}
+
+.race_icon.Random {
+    background-position: -30px 0px;
+}

@@ -1,6 +1,46 @@
 {% extends "base.html" %}
 {% block headtitle %} Tournament View {% endblock %}
 {% block content %}
-{{ message }}
+<div id="ladder">
+  <div id="ladder_container">
+    <img src="/site_media/img/blank_ladder.png" alt="" />
+    {% for matchup in matchup_list %}
+
+      {% if matchup.player_1_coords and matchup.player_1 %}
+        <div class='player_box' style='top: {{ matchup.player_1_coords.top }}px; left: {{ matchup.player_1_coords.left }}px; '>
+          <div class='league_icon {{ matchup.player_1.get_league_display }}'></div>
+          <div class='name'> {{ matchup.player_1.name }} </div>
+          <div class='race_icon {{ matchup.player_1.get_race_display }}'></div>
+        </div>
+      {% endif %}
+
+      {% if matchup.player_2_coords and matchup.player_2 %}
+        <div class='player_box' style='top: {{ matchup.player_2_coords.top }}px; left: {{ matchup.player_2_coords.left }}px; '>
+          <div class='league_icon {{ matchup.player_2.get_league_display }}'></div>
+          <div class='name'> {{ matchup.player_2.name }} </div>
+          <div class='race_icon {{ matchup.player_2.get_race_display }}'></div>
+        </div>
+      {% endif %}
+
+      {% if matchup.winner_coords and matchup.winner %}
+        <div class='player_box' style='top: {{ matchup.winner_coords.top }}px; left: {{ matchup.winner_coords.left }}px; '>
+          <div class='league_icon {{ matchup.winner.get_league_display }}'></div>
+          <div class='name'> {{ matchup.winner.name }} </div>
+          <div class='race_icon {{ matchup.winner.get_race_display }}'></div>
+        </div>
+      {% endif %}
+
+      {% if matchup.loser_coords and matchup.loser %}
+        <div class='player_box' style='top: {{ matchup.loser_coords.top }}px; left: {{ matchup.loser_coords.left }}px; '>
+          <div class='league_icon {{ matchup.loser.get_league_display }}'></div>
+          <div class='name'> {{ matchup.loser.name }} </div>
+          <div class='race_icon {{ matchup.loser.get_race_display }}'></div>
+        </div>
+      {% endif %}
+
+
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
 

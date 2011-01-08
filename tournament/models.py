@@ -1,4 +1,5 @@
 from django.db import models
+from lib import tournament_tree
 
 class Matchup(models.Model):
     name        = models.CharField(max_length=30)
@@ -29,7 +30,31 @@ class Matchup(models.Model):
                                                         related_name='player_2',
                                                         verbose_name='Player 2',
                                                         help_text='Only set for first round matches')
-    
+    @property 
+    def display_coords(self):
+        return tournament_tree.mapping[self.name]
+
+    def get_display_coords(self,field):
+        if self.display_coords.has_key(field):
+            return {
+                'left'  : self.display_coords[field][0],
+                'top'   : self.display_coords[field][1]
+            }
+        else:
+            return None
+
+    def player_1_coords(self):
+        return self.get_display_coords('player_1')
+
+    def player_2_coords(self):
+        return self.get_display_coords('player_2')
+
+    def winner_coords(self):
+        return self.get_display_coords('winner')
+
+    def loser_coords(self):
+        return self.get_display_coords('loser')
+
     def participants(self):
         ret = []
         if self.player_1_id:
