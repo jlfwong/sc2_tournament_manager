@@ -10,19 +10,18 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    # 2v2
+    (r'^2v2/', include('zrl2v2.urls')),
+    
     (r'^$',tournament.views.home),
     (r'^players$',tournament.views.players),
     (r'^login$',login,{
         'template_name':'login.html'
     }),
     (r'^logout$',logout),
-    # Example:
 
-    # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/players/player/sc2ranks', sc2ranks),
-    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
     (r'^site_media/(?P<path>.*)$','django.views.static.serve',{
         'document_root': settings.MEDIA_ROOT
