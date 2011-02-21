@@ -8,7 +8,7 @@ DATA_JSON_PATH = os.path.join(os.path.dirname(__file__),"data.json")
 
 
 def data_handle(request):
-    if 'data' in request.POST:
+    if 'data' in request.POST and request.session.get('2v2_authed',False):
         data_json = request.POST['data']
         simplejson.loads(data_json) # Sanity check
         open(DATA_JSON_PATH,'w').write(data_json)
