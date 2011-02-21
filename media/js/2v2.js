@@ -1,5 +1,6 @@
 window.data = {};
 window.anim_over = false;
+window.edit_mode = false;
 
 var Workspace = Backbone.Controller.extend({
   routes: {
@@ -8,6 +9,7 @@ var Workspace = Backbone.Controller.extend({
   edit: function() {
     function editMode() {
       $('#grid .cell input').show();
+      window.edit_mode = true;
     }
 
     function auth() {
@@ -37,6 +39,28 @@ window.setTimeout(function() {
   window.anim_over = true;
 },5500);
 
+function updateTheGrid() {
+  var nteams = window.data['teams'].length;
+  for (var row = 0; row < nteams; row++) {
+    for (var col = 0; col < nteams; col++) {
+      $('#grid .cell[data-row=' + row + '][data-col=' + col + ']')
+        .trigger('change_winner',[data['results'][row][col]]);
+    }
+  }
+}
+
+(function updateTheData() {
+  if (window.edit_mode) return;
+  if (window.anim_over) {
+    data_fetch(function() {
+      updateTheGrid();
+      window.setTimeout(updateTheData,10000);
+    });
+  } else {
+    window.setTimeout(updateTheData,250);
+  }
+})();
+
 function data_fetch(callback) {
   $.getJSON('data.json',function(data) {
     window.data = data;  
@@ -48,7 +72,9 @@ function data_put() {
   $.post('data.json',{
     data: JSON.stringify(window.data)
   },function(data) {
+    console.log('put!',data);
     window.data = data;
+    updateTheGrid();
   });
 }
 
@@ -84,14 +110,17 @@ $('#grid .cell input').live('click',function() {
 
   var $compCell = $('#grid .cell[data-row=' + col + '][data-col=' + row + ']');
 
-  if (checked) {
-    $cell.trigger('change_winner',['g']);
-    $compCell.trigger('change_winner',['r']);
-  } else {
-    $cell.trigger('change_winner',[' ']);
-    $compCell.trigger('change_winner',[' ']);
-  }
-  window.setTimeout(data_put,200); // Just to be safe
+  data_fetch(function() {
+    updateTheGrid();
+    if (checked) {
+      $cell.trigger('change_winner',['g']);
+      $compCell.trigger('change_winner',['r']);
+    } else {
+      $cell.trigger('change_winner',[' ']);
+      $compCell.trigger('change_winner',[' ']);
+    }
+    window.setTimeout(data_put,200); // Just to be safe
+  });
 });
 
 data_fetch(function () {
