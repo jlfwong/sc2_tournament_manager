@@ -84,7 +84,8 @@ $('#grid .cell').live('change_winner',function(ev,state) {
   var col = $cell.data('col')
   $cell.
     removeClass('green_win').
-    removeClass('red_win');
+    removeClass('red_win').
+    find('input').attr('checked',false);
 
   window.data['results'][row][col] = state;
 
